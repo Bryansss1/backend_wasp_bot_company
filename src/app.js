@@ -1,8 +1,9 @@
-import "dotenv/config"
-import express  from "express"
-import cors from "cors"
-import {dbSource} from "./config/appDatasource.js"
-import { initModel } from "./modules/init.models.js"
+require('dotenv').config();
+const express=require("express")
+const cors=require("cors")
+const {dbSource}=require("./config/appDatasource.js");
+const routerModels = require('./routes/index.js');
+
 
 const app=express()
 app.use(cors())
@@ -18,8 +19,6 @@ dbSource.authenticate()
 dbSource.sync({force:true})
 .then(()=>console.log("server syncroned"))
 
-initModel()
-
 app.get("/",(req,res)=>{
 res.json({message:"welcome to the server"})
 })
@@ -27,3 +26,5 @@ res.json({message:"welcome to the server"})
 app.listen(PORT,()=>{
     console.log(`localhost:${PORT}`)
 })
+
+routerModels(app)
